@@ -93,3 +93,31 @@ export const loginUser = async(req,res)=>{
         console.log(error)
     }
 }
+
+
+export const getUserProfile = async(req,res)=>{
+    const id = req.user.id
+
+    const user = await prisma.users.findUnique({
+        where:{
+             id: +id
+        },
+
+        select:{
+            id: true,
+            email: true,
+            username: true
+        }
+    })
+
+    if(!user){
+        return res.status(404).json({
+            message: "user not found"
+        })
+    }
+
+    res.status(200).json({
+        message: "user profile geted",
+        user
+    })
+}
